@@ -1,17 +1,15 @@
 var gameBoardModule = (() =>{
-    let gameboard = ["", "", "", "", "", "O", "", "", ""]
+    let gameboard = ["", "", "", "", "", "", "", "", ""]
 
-    
-
-    let render = () => {
+    let renderBoard = () => {
         gameboard.forEach((square, index) => {
             if (square !== "") {
                 let currentSquare = document.querySelector(`#square-${index}`)
                 currentSquare.textContent = `${square}`
             }
-
         })
     } 
+
     function checkWinner() {
         let winner = null
         const winningCombinations = [
@@ -37,55 +35,63 @@ var gameBoardModule = (() =>{
     }
 
     function updateGameboard(squareIndex) {
-        gameboard[squareIndex] = currentPlayer;
+        gameboard[squareIndex] = Game.currentPlayer;
     }
 
     return {
-        render, checkWinner, updateGameboard
+        renderBoard, checkWinner, updateGameboard
     }
+
+})()
+
+const PlayerFactory = (playerName, playerMark) => {
+    return {playerName, playerMark}
+}
+
+const Game = ( function() {
+    let currentPlayer = "X"
+
+    //valid move
+    function checkValidMove(currentSelection) {
+        return (currentSelection.textContent === "")   
+    }
+
+    //make mark
+    function makeMove() {
+        square.textContent = currentPlayer
+    }
+
+    function togglePlayer() {
+        currentPlayer = (currentPlayer === "X") ? "O" : "X";
+    }
+
+    return { currentPlayer, checkValidMove, togglePlayer} 
 
 })()
 
 
 
-
-
-
-//valid move
-function checkValidMove(currentSelection) {
-    return (currentSelection.textContent === "")   
-}
-
-//make mark
-function makeMove() {
-    square.textContent = currentPlayer
-}
-
-function togglePlayer() {
-    if (currentPlayer === "X") {
-        currentPlayer = "O"
-    } else { currentPlayer = "X"}
-}
-
-
-
-let currentPlayer = "X"
-
-squares = document.querySelectorAll('.square')
-squares.forEach((square, index) => {
+const displayController = ( function() {
+    squares = document.querySelectorAll('.square')
+    squares.forEach((square, index) => {
     square.addEventListener('click', () => {
-        if (checkValidMove(square)) {
-            square.textContent = currentPlayer
+        if (Game.checkValidMove(square)) {
+            square.textContent = Game.currentPlayer
             gameBoardModule.updateGameboard(index)
             gameBoardModule.checkWinner()
-            togglePlayer()
-        }
-        
+            Game.togglePlayer()
+        }     
     })
-})
+    })
+
+    return {
+
+    }
+})()
 
 
 
-gameBoardModule.render()
+
+gameBoardModule.renderBoard()
 
 // displayController
