@@ -10,7 +10,7 @@
     <header><h1>Tic Tac Toe</h1></header>
 
     <div class="content">
-        <div class="container board">
+        <div class="container board hidden">
             <div class="square" value="0" id="square-0"></div>
             <div class="square" value="1" id="square-1"></div>
             <div class="square" value="2" id="square-2"></div>
@@ -23,13 +23,36 @@
         </div>
 
 
-        <div class="container selection hidden">
+        <div class="container-choice selection hidden">
             <div class="selection-title">
                 <h2>Choose Your Mark</h2>
                 <h3>( X GOES FIRST )</h3>
             </div>
             <button class="btn select-x" >X</button>
             <button class="btn select-o" >O</button>
+        </div>
+
+        <div class="container-choice player-selection-container">
+            <div class="selection-title">
+                <h2>Choose Your Mark</h2>
+                <h3>( X GOES FIRST )</h3>
+            </div>
+
+            <div class="player-name-container player1">
+                <label for="player1"> [X] Player 1</label>
+                <input type="text" name="player1" id="player1" maxlength="8">
+            </div>
+            <div class="player-name-container player2">
+                <label for="player2"> [O] Player 2</label>
+                <input type="text" name="player2" id="player2" maxlength="8">
+            </div>
+
+            <div class="choice-start btn">
+                <button type="submit">Start!</button>
+                <button type="button" class="choice-ai">Play against AI</button>
+            </div>
+
+
         </div>
     </div>
 

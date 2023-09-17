@@ -20,11 +20,12 @@ body {
 
 
 /* START SELECTION */
-.selection {
+.container-choice {
     border: solid black;
     display: grid;
     grid-template: 1fr 1fr / 1fr 1fr;
     padding: 40px;
+    gap: 10px;
 }
 .selection-title {
     grid-column: 1 / 3;
@@ -33,6 +34,33 @@ body {
 h3 {
     text-align: center;
 }
+
+/* PLAYER CHOICE SELECTION */
+.player-name-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.choice-start {
+    grid-column: 1/3;
+    display: flex;
+    justify-content: space-around;
+}
+
+.choice-start>button {
+    width: 40%;
+    height: 40px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+
 
 /* BOARD */
 .board {
