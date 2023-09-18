@@ -10,6 +10,12 @@ var gameBoardModule = (() =>{
         })
     } 
 
+    function restartGame() {
+        gameboard = ["", "", "", "", "", "", "", "", ""]
+        renderBoard()
+    }
+
+
     function checkWinner() {
         let winner = null
         const winningCombinations = [
@@ -44,7 +50,7 @@ var gameBoardModule = (() =>{
     }
 
     return {
-        renderBoard, checkWinner, updateGameboard
+        renderBoard, checkWinner, updateGameboard, restartGame
     }
 
 })()
@@ -114,6 +120,25 @@ function displayPlayerName() {
     player2DisplayName = document.querySelector(".player2-container")
     player2DisplayName.textContent = player2.playerName
 }
+
+function toggleHidden(board,singleplayer,multiplayer) {
+    const boardDIV = document.querySelector(".board")
+    const singleplayerDIV = document.querySelector(".ai-selection")
+    const multiDIV = document.querySelector(".player-selection-container")
+    
+    boardDIV.classList.add('hidden')
+    singleplayerDIV.classList.add('hidden')
+    multiDIV.classList.add('hidden')
+
+    if (board) {      
+        boardDIV.classList.remove('hidden')
+    } else if (singleplayer) {
+        singleplayerDIV.classList.remove('hidden')
+    } else if (multiplayer) {
+        multiDIV.classList.remove('hidden')
+    }
+}
+
 
 gameBoardModule.renderBoard()
 
