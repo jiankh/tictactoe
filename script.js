@@ -55,20 +55,17 @@ const PlayerFactory = (playerName, playerMark) => {
 
 const Game = ( function() {
     let currentPlayer = "X"
-
-    //valid move
-    function checkValidMove(currentSelection) {
-        return (currentSelection.textContent === "")   
-    }
+    
     function getCurrentPlayer() {
         return currentPlayer
     }
-
     function togglePlayer() {
         currentPlayer = (currentPlayer === "X") ? "O" : "X";
     }
 
-    return { getCurrentPlayer, checkValidMove, togglePlayer} 
+
+
+    return { getCurrentPlayer, togglePlayer} 
 
 })()
 
@@ -76,12 +73,16 @@ const Game = ( function() {
 //use this to change the visual board and adjust the inner board
 const displayController = ( function() {
     function makeMove(HTMLsquare,index) {
-        if (Game.checkValidMove(HTMLsquare)) {
+        if (checkValidMove(HTMLsquare)) {
             HTMLsquare.textContent = Game.getCurrentPlayer()
             gameBoardModule.updateGameboard(index)
             gameBoardModule.checkWinner()
             Game.togglePlayer()
         }
+    }
+
+    function checkValidMove(currentSelection) {
+        return (currentSelection.textContent === "")   
     }
 
     squares = document.querySelectorAll('.square')
@@ -93,6 +94,26 @@ const displayController = ( function() {
     return {
     }
 })()
+
+
+startBtn2Players = document.querySelector(".start-btn-2players")
+startBtn2Players.addEventListener('click', () => {
+    displayPlayerName()
+})
+
+function displayPlayerName() {
+    player1Name = document.querySelector("#player1").value
+    player2Name = document.querySelector("#player2").value
+    
+    player1 = PlayerFactory(player1Name, "X")
+    player2 = PlayerFactory(player2Name, "O")
+    
+    player1DisplayName = document.querySelector(".player1-container")
+    player1DisplayName.textContent = player1.playerName
+    
+    player2DisplayName = document.querySelector(".player2-container")
+    player2DisplayName.textContent = player2.playerName
+}
 
 gameBoardModule.renderBoard()
 

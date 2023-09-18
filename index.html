@@ -22,6 +22,14 @@
             <div class="square" value="8" id="square-8"></div>
         </div>
 
+        <div class="player-display">
+            <div class="player1-container">Player 1</div>
+            <div class="player2-container">Player 2</div>
+            <div class="restart-container">
+                <button class="restart-btn" type="reset">Restart</button>
+            </div>
+        </div>
+
 
         <div class="container-choice selection hidden">
             <div class="selection-title">
@@ -32,26 +40,23 @@
             <button class="btn select-o" >O</button>
         </div>
 
-        <div class="container-choice player-selection-container hidden">
-            <div class="selection-title">
-                <h2>Choose Your Mark</h2>
-                <h3>( X GOES FIRST )</h3>
-            </div>
-
-            <div class="player-name-container player1">
-                <label for="player1"> [X] Player 1</label>
-                <input type="text" name="player1" id="player1" maxlength="8">
-            </div>
-            <div class="player-name-container player2">
-                <label for="player2"> [O] Player 2</label>
-                <input type="text" name="player2" id="player2" maxlength="8">
-            </div>
-
-            <div class="choice-start btn">
-                <button type="submit">Start!</button>
-                <button type="button" class="choice-ai">Play against AI</button>
-            </div>
-
+        <div class="container-choice player-selection-container">
+                <div class="selection-title">
+                    <h2>Choose Your Mark</h2>
+                    <h3>( X GOES FIRST )</h3>
+                </div>
+                <div class="player-name-container player1">
+                    <label for="player1"> [X] Player 1</label>
+                    <input type="text" name="player1" id="player1" maxlength="8">
+                </div>
+                <div class="player-name-container player2">
+                    <label for="player2"> [O] Player 2</label>
+                    <input type="text" name="player2" id="player2" maxlength="8">
+                </div>
+                <div class="choice-start btn">
+                    <button class="start-btn-2players">Start!</button>
+                    <button type="button" class="choice-ai">Play against AI</button>
+                </div>
 
         </div>
     </div>
