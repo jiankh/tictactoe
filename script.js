@@ -26,9 +26,14 @@ var gameBoardModule = (() =>{
             const [a,b,c] = winningCombinations[i]
             if (gameboard[a] === gameboard[b] && gameboard[b] === gameboard[c] && gameboard[a] !== "") {
                 winner = gameboard[a]
-                console.log(winner)
             }
         }
+
+        const drawGame = gameboard.every((square) => {
+            return (square !== "")
+        })
+        if (drawGame) { winner = 'Draw'}
+
         if (winner !== null) {
             return alert(winner)
         }
@@ -55,14 +60,9 @@ const Game = ( function() {
     function checkValidMove(currentSelection) {
         return (currentSelection.textContent === "")   
     }
-
     function getCurrentPlayer() {
         return currentPlayer
     }
-    // //make mark
-    // function makeMove() {
-    //     square.textContent = currentPlayer
-    // }
 
     function togglePlayer() {
         currentPlayer = (currentPlayer === "X") ? "O" : "X";
@@ -73,27 +73,26 @@ const Game = ( function() {
 })()
 
 
-
+//use this to change the visual board and adjust the inner board
 const displayController = ( function() {
-    squares = document.querySelectorAll('.square')
-    squares.forEach((square, index) => {
-    square.addEventListener('click', () => {
-        if (Game.checkValidMove(square)) {
-            square.textContent = Game.getCurrentPlayer()
+    function makeMove(HTMLsquare,index) {
+        if (Game.checkValidMove(HTMLsquare)) {
+            HTMLsquare.textContent = Game.getCurrentPlayer()
             gameBoardModule.updateGameboard(index)
             gameBoardModule.checkWinner()
             Game.togglePlayer()
-        }     
-    })
-    })
+        }
+    }
 
+    squares = document.querySelectorAll('.square')
+    squares.forEach((square, index) => {
+    square.addEventListener('click', () => {
+        makeMove(square,index)     
+        })
+    })
     return {
-
     }
 })()
-
-
-
 
 gameBoardModule.renderBoard()
 
