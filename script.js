@@ -6,13 +6,16 @@ var gameBoardModule = (() =>{
             if (square !== "") {
                 let currentSquare = document.querySelector(`#square-${index}`)
                 currentSquare.textContent = `${square}`
-            }
+            } 
         })
     } 
 
     function restartGame() {
         gameboard = ["", "", "", "", "", "", "", "", ""]
-        renderBoard()
+        gameboard.forEach((square, index) => {
+            let currentSquare = document.querySelector(`#square-${index}`)
+            currentSquare.textContent = ""
+        })
     }
 
 
@@ -97,7 +100,26 @@ const displayController = ( function() {
         makeMove(square,index)     
         })
     })
-    return {
+
+    function toggleHidden(board,singleplayer,multiplayer) {
+        const boardDIV = document.querySelector(".board")
+        const singleplayerDIV = document.querySelector(".ai-selection")
+        const multiDIV = document.querySelector(".player-selection-container")
+        
+        boardDIV.classList.add('hidden')
+        singleplayerDIV.classList.add('hidden')
+        multiDIV.classList.add('hidden')
+    
+        if (board) {      
+            boardDIV.classList.remove('hidden')
+        } else if (singleplayer) {
+            singleplayerDIV.classList.remove('hidden')
+        } else if (multiplayer) {
+            multiDIV.classList.remove('hidden')
+        }
+    }
+
+    return { toggleHidden
     }
 })()
 
@@ -121,23 +143,10 @@ function displayPlayerName() {
     player2DisplayName.textContent = player2.playerName
 }
 
-function toggleHidden(board,singleplayer,multiplayer) {
-    const boardDIV = document.querySelector(".board")
-    const singleplayerDIV = document.querySelector(".ai-selection")
-    const multiDIV = document.querySelector(".player-selection-container")
-    
-    boardDIV.classList.add('hidden')
-    singleplayerDIV.classList.add('hidden')
-    multiDIV.classList.add('hidden')
-
-    if (board) {      
-        boardDIV.classList.remove('hidden')
-    } else if (singleplayer) {
-        singleplayerDIV.classList.remove('hidden')
-    } else if (multiplayer) {
-        multiDIV.classList.remove('hidden')
-    }
-}
+restartGameBtn = document.querySelector(".restart-btn")
+restartGameBtn.addEventListener("click", ()=> {
+    gameBoardModule.restartGame()
+})
 
 
 gameBoardModule.renderBoard()
