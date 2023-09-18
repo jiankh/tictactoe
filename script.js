@@ -35,7 +35,7 @@ var gameBoardModule = (() =>{
     }
 
     function updateGameboard(squareIndex) {
-        gameboard[squareIndex] = Game.currentPlayer;
+        gameboard[squareIndex] = Game.getCurrentPlayer();
     }
 
     return {
@@ -56,16 +56,19 @@ const Game = ( function() {
         return (currentSelection.textContent === "")   
     }
 
-    //make mark
-    function makeMove() {
-        square.textContent = currentPlayer
+    function getCurrentPlayer() {
+        return currentPlayer
     }
+    // //make mark
+    // function makeMove() {
+    //     square.textContent = currentPlayer
+    // }
 
     function togglePlayer() {
         currentPlayer = (currentPlayer === "X") ? "O" : "X";
     }
 
-    return { currentPlayer, checkValidMove, togglePlayer} 
+    return { getCurrentPlayer, checkValidMove, togglePlayer} 
 
 })()
 
@@ -76,7 +79,7 @@ const displayController = ( function() {
     squares.forEach((square, index) => {
     square.addEventListener('click', () => {
         if (Game.checkValidMove(square)) {
-            square.textContent = Game.currentPlayer
+            square.textContent = Game.getCurrentPlayer()
             gameBoardModule.updateGameboard(index)
             gameBoardModule.checkWinner()
             Game.togglePlayer()
