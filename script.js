@@ -17,7 +17,11 @@ var gameBoardModule = (() =>{
             currentSquare.textContent = ""
         })
     }
-
+    const restartGameBtn = document.querySelector(".restart-btn")
+    restartGameBtn.addEventListener("click", ()=> {
+        restartGame()
+        winnerDialog.close()
+    })
 
     function checkWinner() {
         let winner = null
@@ -44,13 +48,23 @@ var gameBoardModule = (() =>{
         if (drawGame) { winner = 'Draw'}
 
         if (winner !== null) {
-            return alert(winner)
+            announceWinner(winner)
         }
+    }
+
+    const winnerDialog = document.querySelector(".dialog")
+    function announceWinner(winner) {   
+        const dialogTEXT = document.querySelector(".dialog-text")
+        dialogTEXT.textContent = `${winner} wins!`
+
+        winnerDialog.show()
     }
 
     function updateGameboard(squareIndex) {
         gameboard[squareIndex] = Game.getCurrentPlayer();
     }
+
+    
 
     return {
         renderBoard, checkWinner, updateGameboard, restartGame
@@ -72,10 +86,7 @@ const Game = ( function() {
         currentPlayer = (currentPlayer === "X") ? "O" : "X";
     }
 
-
-
     return { getCurrentPlayer, togglePlayer} 
-
 })()
 
 
@@ -102,14 +113,14 @@ const displayController = ( function() {
     })
 
     function toggleHidden(board,singleplayer,multiplayer) {
-        const boardDIV = document.querySelector(".board")
+        const boardDIV = document.querySelector(".board-container")
         const singleplayerDIV = document.querySelector(".ai-selection")
         const multiDIV = document.querySelector(".player-selection-container")
         
         boardDIV.classList.add('hidden')
         singleplayerDIV.classList.add('hidden')
         multiDIV.classList.add('hidden')
-    
+
         if (board) {      
             boardDIV.classList.remove('hidden')
         } else if (singleplayer) {
@@ -124,29 +135,31 @@ const displayController = ( function() {
 })()
 
 
-startBtn2Players = document.querySelector(".start-btn-2players")
-startBtn2Players.addEventListener('click', () => {
-    displayPlayerName()
-})
+const Multiplayer = (function() {
+    //START WITH 2 PLAYERS
+    function displayPlayerName() {
+        player1Name = document.querySelector("#player1").value
+        player2Name = document.querySelector("#player2").value
+        
+        player1 = PlayerFactory(player1Name, "X")
+        player2 = PlayerFactory(player2Name, "O")
+        
+        player1DisplayName = document.querySelector(".player1-container")
+        player1DisplayName.textContent = player1.playerName
+        
+        player2DisplayName = document.querySelector(".player2-container")
+        player2DisplayName.textContent = player2.playerName
+    }
 
-function displayPlayerName() {
-    player1Name = document.querySelector("#player1").value
-    player2Name = document.querySelector("#player2").value
-    
-    player1 = PlayerFactory(player1Name, "X")
-    player2 = PlayerFactory(player2Name, "O")
-    
-    player1DisplayName = document.querySelector(".player1-container")
-    player1DisplayName.textContent = player1.playerName
-    
-    player2DisplayName = document.querySelector(".player2-container")
-    player2DisplayName.textContent = player2.playerName
-}
+    startBtn2Players = document.querySelector(".start-btn-2players")
+    startBtn2Players.addEventListener('click', () => {
+        displayPlayerName()
+        displayController.toggleHidden(true,false,false)
+    })
 
-restartGameBtn = document.querySelector(".restart-btn")
-restartGameBtn.addEventListener("click", ()=> {
-    gameBoardModule.restartGame()
-})
+
+
+})()
 
 
 gameBoardModule.renderBoard()

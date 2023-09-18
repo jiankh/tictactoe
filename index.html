@@ -10,23 +10,29 @@
     <header><h1>Tic Tac Toe</h1></header>
 
     <div class="content">
-        <div class="container board">
-            <div class="square" value="0" id="square-0"></div>
-            <div class="square" value="1" id="square-1"></div>
-            <div class="square" value="2" id="square-2"></div>
-            <div class="square" value="3" id="square-3"></div>
-            <div class="square" value="4" id="square-4"></div>
-            <div class="square" value="5" id="square-5"></div>
-            <div class="square" value="6" id="square-6"></div>
-            <div class="square" value="7" id="square-7"></div>
-            <div class="square" value="8" id="square-8"></div>
-        </div>
+        <dialog class="winner-dialog dialog">
+            <div class="dialog-text"></div>
+            <button class="restart-btn">Restart</button>
+        </dialog>
 
-        <div class="player-display">
-            <div class="player1-container">Player 1</div>
-            <div class="player2-container">Player 2</div>
-            <div class="restart-container">
-                <button class="restart-btn">Restart</button>
+        <div class="board-container">
+            <div class="container board">
+                <div class="square" value="0" id="square-0"></div>
+                <div class="square" value="1" id="square-1"></div>
+                <div class="square" value="2" id="square-2"></div>
+                <div class="square" value="3" id="square-3"></div>
+                <div class="square" value="4" id="square-4"></div>
+                <div class="square" value="5" id="square-5"></div>
+                <div class="square" value="6" id="square-6"></div>
+                <div class="square" value="7" id="square-7"></div>
+                <div class="square" value="8" id="square-8"></div>
+            </div>
+            <div class="player-display">
+                <div class="player1-container">Player 1</div>
+                <div class="player2-container">Player 2</div>
+                <div class="restart-container">
+                    <button class="restart-btn">Restart</button>
+                </div>
             </div>
         </div>
 
@@ -40,7 +46,7 @@
             <button class="btn select-o" >O</button>
         </div>
 
-        <div class="container-choice player-selection-container">
+        <div class="container-choice player-selection-container hidden">
                 <div class="selection-title">
                     <h2>Choose Your Mark</h2>
                     <h3>( X GOES FIRST )</h3>
