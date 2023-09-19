@@ -36,6 +36,13 @@ const gameBoardModule = (() =>{
 
     function checkWinner() {
         let winner = null
+
+        //check if all the squares are taken and the game is over
+        const drawGame = gameboard.every((square) => {
+            return (square !== "")
+        })
+        if (drawGame) { winner = 'Draw'}
+
         const winningCombinations = [
             [0, 1, 2],
             [3, 4, 5],
@@ -52,12 +59,6 @@ const gameBoardModule = (() =>{
                 winner = gameboard[a]
             }
         }
-        //check if all the squares are taken and the game is over
-        const drawGame = gameboard.every((square) => {
-            return (square !== "")
-        })
-        if (drawGame) { winner = 'Draw'}
-
         return winner
     }
 
