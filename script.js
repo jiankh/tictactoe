@@ -72,14 +72,14 @@ const gameBoardModule = (() =>{
         if (AI_MODE && winner === "X") {
             player1HTML = document.querySelector(".player1-container").textContent
             dialogTEXT.textContent = `${player1HTML} wins!`
-        } else if (winner ==="O") {
+        } else if ((AI_MODE) && winner ==="O") {
             player2HTML = document.querySelector(".player2-container").textContent
             dialogTEXT.textContent = `${player2HTML} wins!`
         }
 
-        if (Multiplayer.getPlayer1() && (winner === "X")) {
+        if ((!AI_MODE) && (winner === "X")) {
             dialogTEXT.textContent = `${Multiplayer.getPlayer1().playerName} wins!`
-        } else if (Multiplayer.getPlayer2() && (winner === "O")) {
+        } else if ((!AI_MODE) && (winner === "O")) {
             dialogTEXT.textContent = `${Multiplayer.getPlayer2().playerName} wins!`
         }
 
@@ -172,7 +172,6 @@ const gameBoardModule = (() =>{
         }}
     }
 
-
     return {
         flipScoresValues, renderBoard, checkWinner, updateGameboard, restartGame, announceWinner, bestMove, getCurrentPlayerAi: () => currentPlayerAi
     }
@@ -240,7 +239,16 @@ const displayController = ( function() {
 
     function returnToMainMenu() {
         gameBoardModule.restartGame()
+        gameBoardModule.renderBoard()
+
+        const player1 = document.querySelector("#player1")
+        const player2 = document.querySelector("#player2")
+        console.log(player1.textContent)
+        player1.value = ""
+        player2.value = ""
+        currentPlayer = "X"
         toggleHidden(false,false,true)
+        AI_MODE = false
     }
 
     squares = document.querySelectorAll('.square')
