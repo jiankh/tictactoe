@@ -1,4 +1,7 @@
 let AI_MODE = false
+let currentPlayer = "X"
+let human 
+let ai
 
 const gameBoardModule = (() =>{
     let gameboard = ["", "", "", "", "", "", "", "", ""]
@@ -18,6 +21,10 @@ const gameBoardModule = (() =>{
             let currentSquare = document.querySelector(`#square-${index}`)
             currentSquare.textContent = ""
         })
+        if (AI_MODE && ai==="X") {
+            currentPlayer = "X"
+            bestMove()
+        } 
     }
     const restartGameBtn = document.querySelectorAll(".restart-btn")
     
@@ -61,23 +68,29 @@ const gameBoardModule = (() =>{
             dialogTEXT.textContent = "It's a Draw!"
         }
 
+        if (AI_MODE && winner === "X") {
+            player1HTML = document.querySelector(".player1-container").textContent
+            dialogTEXT.textContent = `${player1HTML} wins!`
+        } else if (winner ==="O") {
+            player2HTML = document.querySelector(".player2-container").textContent
+            dialogTEXT.textContent = `${player2HTML} wins!`
+        }
+
         if (Multiplayer.getPlayer1() && (winner === "X")) {
             dialogTEXT.textContent = `${Multiplayer.getPlayer1().playerName} wins!`
         } else if (Multiplayer.getPlayer2() && (winner === "O")) {
             dialogTEXT.textContent = `${Multiplayer.getPlayer2().playerName} wins!`
         }
+
         winnerDialog.show()
     }
 
     function updateGameboard(squareIndex) {
-        gameboard[squareIndex] = Game.getCurrentPlayer();
+        gameboard[squareIndex] = currentPlayer;
     }
 
     // LOGIC FOR AI
 
-    
-    let human = "O"
-    let ai = "X"
     let currentPlayerAi = human
 
     function bestMove() {
@@ -95,16 +108,26 @@ const gameBoardModule = (() =>{
             }
         }
         gameboard[move] = ai
+        updateGameboard(move)
         renderBoard()
+
+        result = gameBoardModule.checkWinner()
+            if (result !== null) {
+                gameBoardModule.announceWinner(result)
+            }        
+
         currentPlayerAi = human
         Game.togglePlayer()
     }
 
     let scores = {
-        "X":10,
-        "O":-10,
+        "X":-10,
+        "O":10,
         "Draw":0
     }
+
+
+    //good for YOU[X] X= -10
 
     function minimax(board, depth, isMaximizing) {
         let result = checkWinner()
@@ -136,11 +159,21 @@ const gameBoardModule = (() =>{
             return bestScore
         }
         
-    }   
+    } 
+    
+    function flipScoresValues() {
+        console.log(scores["X"] )
+        if (scores["X"] === -10) {
+            scores = {
+            "X":10,
+            "O":-10,
+            "Draw":0
+        }}
+    }
 
 
     return {
-         renderBoard, checkWinner, updateGameboard, restartGame, announceWinner, bestMove, getCurrentPlayerAi: () => currentPlayerAi
+        flipScoresValues, renderBoard, checkWinner, updateGameboard, restartGame, announceWinner, bestMove, getCurrentPlayerAi: () => currentPlayerAi
     }
 
 })()
@@ -150,16 +183,12 @@ const PlayerFactory = (playerName, playerMark) => {
 }
 
 const Game = ( function() {
-    let currentPlayer = "X"
-    
-    function getCurrentPlayer() {
-        return currentPlayer
-    }
+
     function togglePlayer() {
         currentPlayer = (currentPlayer === "X") ? "O" : "X";
     }
 
-    return { getCurrentPlayer, togglePlayer} 
+    return { togglePlayer} 
 })()
 
 //use this to change the visual board and adjust the inner board
@@ -167,13 +196,22 @@ const displayController = ( function() {
 
     function makeMove(HTMLsquare,index) {
         if (checkValidMove(HTMLsquare)) {
-            HTMLsquare.textContent = Game.getCurrentPlayer()
+            HTMLsquare.textContent = currentPlayer
             gameBoardModule.updateGameboard(index)       
             result = gameBoardModule.checkWinner()
             if (result !== null) {
                 gameBoardModule.announceWinner(result)
             }
             Game.togglePlayer()
+
+            if (AI_MODE) {
+                gameBoardModule.bestMove()
+
+                result = gameBoardModule.checkWinner()
+                if (result !== null) {
+                    gameBoardModule.announceWinner(result)
+                }
+            }
         }
     }
 
@@ -259,7 +297,6 @@ const SinglePlayer = ( function() {
     const player2DisplayName = document.querySelector(".player2-container")
     function displayAiName(choice) {
         if (choice === "X") {
-            console.log(player1DisplayName)
             player1DisplayName.textContent = "You"
             player2DisplayName.textContent = "AI"
         } else {
@@ -270,26 +307,20 @@ const SinglePlayer = ( function() {
     }
 
     selectedAiX.addEventListener("click", () => {
-        displayController.toggleHidden(true, false, false)
         displayAiName("X")
-
+        displayController.toggleHidden(true, false, false)
+        human = "X"
+        ai = "O"
     })
 
     selectedAiO.addEventListener("click", () => {
         displayAiName("O")
         displayController.toggleHidden(true, false, false)
+        human = "O"
+        ai = "X"
+        gameBoardModule.flipScoresValues()
         gameBoardModule.bestMove()
     })
-
-    // currentPlayerAi = gameBoardModule.getCurrentPlayerAi()
-
-    // if (currentPlayerAi === "human") {
-    //     Game.togglePlayer()
-    // }
-    
-
-
-
 
 })()
 
