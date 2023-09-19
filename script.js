@@ -245,18 +245,19 @@ const displayController = ( function() {
     }
 
     function returnToMainMenu() {
-        gameBoardModule.restartGame()
-        gameBoardModule.renderBoard()
+        location.reload()
+        // gameBoardModule.restartGame()
+        // gameBoardModule.renderBoard()
 
-        const player1 = document.querySelector("#player1")
-        const player2 = document.querySelector("#player2")
+        // const player1 = document.querySelector("#player1")
+        // const player2 = document.querySelector("#player2")
 
-        player1.value = ""
-        player2.value = ""
-        currentPlayer = "X"
-        gameBoardModule.resetScoresValue()
-        toggleHidden(false,false,true)
-        AI_MODE = false
+        // player1.value = ""
+        // player2.value = ""
+        // currentPlayer = "X"
+        // gameBoardModule.resetScoresValue()
+        // toggleHidden(false,false,true)
+        // AI_MODE = false
     }
 
     squares = document.querySelectorAll('.square')
@@ -345,6 +346,7 @@ const SinglePlayer = ( function() {
         displayController.toggleHidden(true, false, false)
         human = "O"
         ai = "X"
+        gameBoardModule.resetScoresValue()
         gameBoardModule.flipScoresValues()
         gameBoardModule.bestMove()
     })
