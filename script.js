@@ -1,4 +1,6 @@
-var gameBoardModule = (() =>{
+let AI_MODE = false
+
+const gameBoardModule = (() =>{
     let gameboard = ["", "", "", "", "", "", "", "", ""]
 
     let renderBoard = () => {
@@ -17,11 +19,13 @@ var gameBoardModule = (() =>{
             currentSquare.textContent = ""
         })
     }
-    const restartGameBtn = document.querySelector(".restart-btn")
-    restartGameBtn.addEventListener("click", ()=> {
-        restartGame()
-        winnerDialog.close()
-    })
+    const restartGameBtn = document.querySelectorAll(".restart-btn")
+    
+    restartGameBtn.forEach((button) => {
+        button.addEventListener("click", ()=> {
+            restartGame()
+            winnerDialog.close()
+    })})
 
     function checkWinner() {
         let winner = null
@@ -41,22 +45,27 @@ var gameBoardModule = (() =>{
                 winner = gameboard[a]
             }
         }
-
+        //check if all the squares are taken and the game is over
         const drawGame = gameboard.every((square) => {
             return (square !== "")
         })
         if (drawGame) { winner = 'Draw'}
 
-        if (winner !== null) {
-            announceWinner(winner)
-        }
+        return winner
     }
 
     const winnerDialog = document.querySelector(".dialog")
     function announceWinner(winner) {   
         const dialogTEXT = document.querySelector(".dialog-text")
-        dialogTEXT.textContent = `${winner} wins!`
+        if (winner === "Draw") {
+            dialogTEXT.textContent = "It's a Draw!"
+        }
 
+        if (Multiplayer.getPlayer1() && (winner === "X")) {
+            dialogTEXT.textContent = `${Multiplayer.getPlayer1().playerName} wins!`
+        } else if (Multiplayer.getPlayer2() && (winner === "O")) {
+            dialogTEXT.textContent = `${Multiplayer.getPlayer2().playerName} wins!`
+        }
         winnerDialog.show()
     }
 
@@ -64,10 +73,74 @@ var gameBoardModule = (() =>{
         gameboard[squareIndex] = Game.getCurrentPlayer();
     }
 
+    // LOGIC FOR AI
+
     
+    let human = "O"
+    let ai = "X"
+    let currentPlayerAi = human
+
+    function bestMove() {
+        let bestScore = -Infinity
+        let move 
+        for (let i = 0; i < gameboard.length; i++) {
+            if (gameboard[i] === "") {
+                gameboard[i] = ai
+                let score = minimax(gameboard, 0, false)
+                gameboard[i] = ""
+                if (score > bestScore) {
+                    bestScore = score
+                    move = i
+                }
+            }
+        }
+        gameboard[move] = ai
+        renderBoard()
+        currentPlayerAi = human
+        Game.togglePlayer()
+    }
+
+    let scores = {
+        "X":10,
+        "O":-10,
+        "Draw":0
+    }
+
+    function minimax(board, depth, isMaximizing) {
+        let result = checkWinner()
+        if (result !== null) {
+            return scores[result]
+        }
+
+        if (isMaximizing) {
+            let bestScore = -Infinity
+            for (let i=0; i < gameboard.length; i++) {
+                if (board[i] === "") {
+                    board[i] = ai
+                    let score = minimax(board, depth+1, false)
+                    board[i] = ""
+                    bestScore = Math.max(score,bestScore)
+                }
+            }
+            return bestScore
+        } else {
+            let bestScore = Infinity
+            for (let i=0; i < gameboard.length; i++) {
+                if (board[i] === "") {
+                    board[i] = human
+                    let score = minimax(board, depth+1, true)
+                    board[i] = ""
+                    bestScore = Math.min(score,bestScore)
+                }
+            }
+            return bestScore
+        }
+        
+    }   
+
 
     return {
-        renderBoard, checkWinner, updateGameboard, restartGame
+         renderBoard, checkWinner, updateGameboard, restartGame, announceWinner, bestMove, getCurrentPlayerAi: () => currentPlayerAi
     }
 
 })()
@@ -89,17 +162,21 @@ const Game = ( function() {
     return { getCurrentPlayer, togglePlayer} 
 })()
 
-
 //use this to change the visual board and adjust the inner board
 const displayController = ( function() {
+
     function makeMove(HTMLsquare,index) {
         if (checkValidMove(HTMLsquare)) {
             HTMLsquare.textContent = Game.getCurrentPlayer()
-            gameBoardModule.updateGameboard(index)
-            gameBoardModule.checkWinner()
+            gameBoardModule.updateGameboard(index)       
+            result = gameBoardModule.checkWinner()
+            if (result !== null) {
+                gameBoardModule.announceWinner(result)
+            }
             Game.togglePlayer()
         }
     }
+
 
     function checkValidMove(currentSelection) {
         return (currentSelection.textContent === "")   
@@ -134,33 +211,87 @@ const displayController = ( function() {
     }
 })()
 
-
 const Multiplayer = (function() {
     //START WITH 2 PLAYERS
+    let player1
+    let player2
+    
+
     function displayPlayerName() {
-        player1Name = document.querySelector("#player1").value
-        player2Name = document.querySelector("#player2").value
+        const player1DisplayName = document.querySelector(".player1-container")
+        const player2DisplayName = document.querySelector(".player2-container")
+
+        const player1Name = document.querySelector("#player1").value
+        const player2Name = document.querySelector("#player2").value
         
         player1 = PlayerFactory(player1Name, "X")
         player2 = PlayerFactory(player2Name, "O")
-        
-        player1DisplayName = document.querySelector(".player1-container")
+
         player1DisplayName.textContent = player1.playerName
-        
-        player2DisplayName = document.querySelector(".player2-container")
         player2DisplayName.textContent = player2.playerName
+
     }
 
-    startBtn2Players = document.querySelector(".start-btn-2players")
+
+    const startBtn2Players = document.querySelector(".start-btn-2players")
     startBtn2Players.addEventListener('click', () => {
         displayPlayerName()
         displayController.toggleHidden(true,false,false)
     })
 
+    return { getPlayer1: () => player1, getPlayer2: () => player2, 
+        }
+    
+})()
+
+const SinglePlayer = ( function() {
+
+    const startAIbtn = document.querySelector(".choice-ai")
+    startAIbtn.addEventListener("click", () => {
+        displayController.toggleHidden(false, true, false)
+        AI_MODE = true
+    })
+
+    const selectedAiX = document.querySelector(".select-x")
+    const selectedAiO = document.querySelector(".select-o")
+
+    const player1DisplayName = document.querySelector(".player1-container")
+    const player2DisplayName = document.querySelector(".player2-container")
+    function displayAiName(choice) {
+        if (choice === "X") {
+            console.log(player1DisplayName)
+            player1DisplayName.textContent = "You"
+            player2DisplayName.textContent = "AI"
+        } else {
+            console.log(player2DisplayName)
+            player1DisplayName.textContent = "AI"
+            player2DisplayName.textContent = "You"
+        }
+    }
+
+    selectedAiX.addEventListener("click", () => {
+        displayController.toggleHidden(true, false, false)
+        displayAiName("X")
+
+    })
+
+    selectedAiO.addEventListener("click", () => {
+        displayAiName("O")
+        displayController.toggleHidden(true, false, false)
+        gameBoardModule.bestMove()
+    })
+
+    // currentPlayerAi = gameBoardModule.getCurrentPlayerAi()
+
+    // if (currentPlayerAi === "human") {
+    //     Game.togglePlayer()
+    // }
+    
+
+
 
 
 })()
-
 
 gameBoardModule.renderBoard()
 

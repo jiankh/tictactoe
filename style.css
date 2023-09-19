@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-
+    font-family: 'Press Start 2P', cursive;
 }
 
 body {
@@ -43,7 +43,6 @@ h3 {
     align-items: center;
     gap: 5px;
     
-    font-size: 1.2rem;
     font-weight: 700;
 }
 
@@ -67,6 +66,8 @@ h3 {
 .board-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center; 
 }
 .board {
     width: 300px;
@@ -77,18 +78,69 @@ h3 {
 
 .square {
     border: solid black;
-    font-size: 5rem;
+    font-size: 4rem;
     text-align: center;
+    color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .player-display {
+    padding-top: 20px;
     display: grid;
-    grid-template: 1fr 1fr / 1fr 1fr;
+    grid-template: 1fr 1fr /  1fr 1fr 1fr;
     justify-items: center;
 }
 
+.restart-container {
+    grid-column: 2/3;
+}
 
 
+/* WINNER DIALOG */
+.dialog {
+    border: none;
+    background-color: rgba(100, 119, 204, 0.7);
+    position: absolute;
+    top:30%;
+
+}
+
+.dialog-container {
+    width:300px;
+    height:100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:20px;
+}
+
+.restart-btn {
+    width: 120px;
+    height:40px;
+    border-radius: 10px;
+}
+.dialog-text {
+    font-size: 1.5rem;
+    text-align: center;
+    color: black;
+    font-weight: 700;;
+}
+
+
+#square-0, #square-6, #square-3 {
+    border-left: none;
+}
+#square-2, #square-5, #square-8 {
+    border-right: none;
+}
+#square-0, #square-1, #square-2 {
+    border-top: none;
+}
+#square-6, #square-7, #square-8 {
+    border-bottom: none;
+}
 
 
 .hidden{ /*must be after the other display:"etc" or will be rewritten */

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
@@ -11,11 +14,13 @@
 
     <div class="content">
         <dialog class="winner-dialog dialog">
-            <div class="dialog-text"></div>
-            <button class="restart-btn">Restart</button>
+            <div class="dialog-container">
+                <div class="dialog-text"></div>
+                <button class="restart-btn">Restart</button>
+            </div>
         </dialog>
 
-        <div class="board-container">
+        <div class="board-container hidden">
             <div class="container board">
                 <div class="square" value="0" id="square-0"></div>
                 <div class="square" value="1" id="square-1"></div>
@@ -29,9 +34,10 @@
             </div>
             <div class="player-display">
                 <div class="player1-container">Player 1</div>
+                <div class="vs-spacer">[X]  VS  [O]</div>
                 <div class="player2-container">Player 2</div>
                 <div class="restart-container">
-                    <button class="restart-btn">Restart</button>
+                    <button class="restart-btn restart-btn-main">Restart</button>
                 </div>
             </div>
         </div>
@@ -40,16 +46,16 @@
         <div class="container-choice ai-selection selection hidden">
             <div class="selection-title">
                 <h2>Choose Your Mark</h2>
-                <h3>( X GOES FIRST )</h3>
+                <h3><em>( X GOES FIRST )</em></h3>
             </div>
             <button class="btn select-x" >X</button>
             <button class="btn select-o" >O</button>
         </div>
 
-        <div class="container-choice player-selection-container hidden">
+        <div class="container-choice player-selection-container">
                 <div class="selection-title">
                     <h2>Choose Your Mark</h2>
-                    <h3>( X GOES FIRST )</h3>
+                    <h3><em>( X GOES FIRST )</em></h3>
                 </div>
                 <div class="player-name-container player1">
                     <label for="player1"> [X] Player 1</label>
@@ -61,14 +67,14 @@
                 </div>
                 <div class="choice-start btn">
                     <button class="start-btn-2players">Start!</button>
-                    <button type="button" class="choice-ai">Play against AI</button>
+                    <button class="choice-ai">Play against AI</button>
                 </div>
 
         </div>
     </div>
 
     <footer>
-        <p>Footer</p>
+        <p>Jean Huang JIANKH@GITHUB</p>
     </footer>
     
 
