@@ -24,7 +24,8 @@ button:active {
 }
 button:hover {
     opacity: 0.8;
-    font-size: 1.001rem
+    font-size: 1.001rem;
+    box-shadow: 1px 1px 3px;
 }
 
 
@@ -135,7 +136,6 @@ h3 {
     background-color: rgba(100, 119, 204, 0.7);
     position: absolute;
     top:30%;
-
 }
 
 .dialog-container {

@@ -216,17 +216,9 @@ const displayController = ( function() {
         }
     }
 
-
     function checkValidMove(currentSelection) {
         return (currentSelection.textContent === "")   
     }
-
-    squares = document.querySelectorAll('.square')
-    squares.forEach((square, index) => {
-    square.addEventListener('click', () => {
-        makeMove(square,index)     
-        })
-    })
 
     function toggleHidden(board,singleplayer,multiplayer) {
         const boardDIV = document.querySelector(".board-container")
@@ -245,6 +237,23 @@ const displayController = ( function() {
             multiDIV.classList.remove('hidden')
         }
     }
+
+    function returnToMainMenu() {
+        gameBoardModule.restartGame()
+        toggleHidden(false,false,true)
+    }
+
+    squares = document.querySelectorAll('.square')
+    squares.forEach((square, index) => {
+    square.addEventListener('click', () => {
+        makeMove(square,index)     
+        })
+    })
+
+    const returnToMenu = document.querySelector(".return-main")
+    returnToMenu.addEventListener("click", () => {
+        returnToMainMenu()
+    }) 
 
     return { toggleHidden
     }
