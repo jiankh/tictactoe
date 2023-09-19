@@ -163,17 +163,24 @@ const gameBoardModule = (() =>{
     } 
     
     function flipScoresValues() {
-        console.log(scores["X"] )
         if (scores["X"] === -10) {
             scores = {
             "X":10,
             "O":-10,
             "Draw":0
-        }}
+        }} 
+    }
+
+    function resetScoresValue() {
+        scores = {
+            "X":-10,
+            "O":10,
+            "Draw":0
+        }
     }
 
     return {
-        flipScoresValues, renderBoard, checkWinner, updateGameboard, restartGame, announceWinner, bestMove, getCurrentPlayerAi: () => currentPlayerAi
+        resetScoresValue, flipScoresValues, renderBoard, checkWinner, updateGameboard, restartGame, announceWinner, bestMove, getCurrentPlayerAi: () => currentPlayerAi
     }
 
 })()
@@ -243,10 +250,11 @@ const displayController = ( function() {
 
         const player1 = document.querySelector("#player1")
         const player2 = document.querySelector("#player2")
-        console.log(player1.textContent)
+
         player1.value = ""
         player2.value = ""
         currentPlayer = "X"
+        gameBoardModule.resetScoresValue()
         toggleHidden(false,false,true)
         AI_MODE = false
     }
@@ -326,6 +334,7 @@ const SinglePlayer = ( function() {
 
     selectedAiX.addEventListener("click", () => {
         displayAiName("X")
+        gameBoardModule.resetScoresValue()
         displayController.toggleHidden(true, false, false)
         human = "X"
         ai = "O"
